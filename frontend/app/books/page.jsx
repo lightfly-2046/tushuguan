@@ -87,12 +87,14 @@ export default function BooksPage() {
           {books.map((book) => (
             <div key={book.id} className="border rounded-lg overflow-hidden shadow-md">
               <div className="p-4">
-                <h2 className="text-xl font-semibold mb-2">{book.attributes.title}</h2>
+                <h2 className="text-xl font-semibold mb-2">{book.attributes.Title}</h2>
                 <p className="text-gray-600 mb-2">
                   {book.attributes.author?.data ? book.attributes.author.data.attributes.name : '未知作者'}
                 </p>
                 <p className="text-gray-500 text-sm mb-4">
-                  {book.attributes.category?.data ? book.attributes.category.data.attributes.name : '未分类'}
+                  {book.attributes.categories?.data && book.attributes.categories.data.length > 0 
+                    ? book.attributes.categories.data[0].attributes.name 
+                    : '未分类'}
                 </p>
                 <Link 
                   href={`/books/${book.id}`}

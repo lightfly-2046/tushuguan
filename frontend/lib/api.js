@@ -48,7 +48,7 @@ api.interceptors.response.use(
 export async function getBooks() {
   try {
     console.log('正在获取图书列表...');
-    const response = await api.get('/api/books?populate=author,category,cover');
+    const response = await api.get('/api/books?populate=author,categories,publisher,cover');
     console.log('获取图书成功:', response.data);
     return response.data;
   } catch (error) {
@@ -60,7 +60,7 @@ export async function getBooks() {
 // 获取单本图书详情
 export async function getBook(id) {
   try {
-    const response = await api.get(`/api/books/${id}?populate=author,category,publisher,cover`);
+    const response = await api.get(`/api/books/${id}?populate=author,categories,publisher,cover`);
     return response.data;
   } catch (error) {
     console.error(`获取图书ID:${id}失败:`, error);
@@ -93,7 +93,7 @@ export async function getCategory(id) {
 // 获取某个分类下的所有图书
 export async function getCategoryBooks(categoryId) {
   try {
-    const response = await api.get(`/api/books?filters[category][id][$eq]=${categoryId}&populate=author,cover`);
+    const response = await api.get(`/api/books?filters[categories][id][$eq]=${categoryId}&populate=author,cover`);
     return response.data;
   } catch (error) {
     console.error(`获取分类ID:${categoryId}下的图书失败:`, error);
@@ -126,7 +126,7 @@ export async function getAuthor(id) {
 // 获取某个作者的所有图书
 export async function getAuthorBooks(authorId) {
   try {
-    const response = await api.get(`/api/books?filters[author][id][$eq]=${authorId}&populate=category,cover`);
+    const response = await api.get(`/api/books?filters[author][id][$eq]=${authorId}&populate=categories,cover`);
     return response.data;
   } catch (error) {
     console.error(`获取作者ID:${authorId}的图书失败:`, error);

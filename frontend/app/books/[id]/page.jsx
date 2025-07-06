@@ -51,7 +51,7 @@ export default function BookDetailPage({ params }) {
 
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="p-6">
-          <h1 className="text-3xl font-bold mb-4">{attributes.title}</h1>
+          <h1 className="text-3xl font-bold mb-4">{attributes.Title}</h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
@@ -62,7 +62,9 @@ export default function BookDetailPage({ params }) {
               </p>
               <p className="mb-2">
                 <span className="font-semibold">分类：</span>
-                {attributes.category?.data ? attributes.category.data.attributes.name : '未分类'}
+                {attributes.categories?.data && attributes.categories.data.length > 0 
+                  ? attributes.categories.data.map(cat => cat.attributes.name).join(', ') 
+                  : '未分类'}
               </p>
               <p className="mb-2">
                 <span className="font-semibold">出版社：</span>
@@ -82,7 +84,7 @@ export default function BookDetailPage({ params }) {
               {attributes.cover?.data && (
                 <img 
                   src={attributes.cover.data.attributes.url} 
-                  alt={`${attributes.title}的封面`}
+                  alt={`${attributes.Title}的封面`}
                   className="w-full h-auto rounded shadow"
                 />
               )}
@@ -91,7 +93,7 @@ export default function BookDetailPage({ params }) {
           
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">简介</h2>
-            <p className="text-gray-700 whitespace-pre-line">{attributes.description || '暂无简介'}</p>
+            <p className="text-gray-700 whitespace-pre-line">{attributes.descript || '暂无简介'}</p>
           </div>
         </div>
       </div>
