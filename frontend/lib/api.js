@@ -3,18 +3,53 @@ import axios from 'axios';
 // API基础URL
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://tushuguan-backend.onrender.com';
 
+console.log('API_URL:', API_URL); // 调试信息
+
 // 创建axios实例
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  // 添加更多配置
+  withCredentials: false, // 不发送cookies
+  timeout: 10000, // 10秒超时
 });
+
+// 请求拦截器
+api.interceptors.request.use(
+  (config) => {
+    console.log('发送请求:', config.url);
+    return config;
+  },
+  (error) => {
+    console.error('请求错误:', error);
+    return Promise.reject(error);
+  }
+);
+
+// 响应拦截器
+api.interceptors.response.use(
+  (response) => {
+    console.log('收到响应:', response.status);
+    return response;
+  },
+  (error) => {
+    console.error('响应错误:', error.message);
+    if (error.response) {
+      console.error('错误状态码:', error.response.status);
+      console.error('错误数据:', error.response.data);
+    }
+    return Promise.reject(error);
+  }
+);
 
 // 获取所有图书
 export async function getBooks() {
   try {
+    console.log('正在获取图书列表...');
     const response = await api.get('/api/books?populate=author,category,cover');
+    console.log('获取图书成功:', response.data);
     return response.data;
   } catch (error) {
     console.error('获取图书列表失败:', error);
