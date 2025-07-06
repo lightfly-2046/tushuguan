@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: tushuguan-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_CLIENT
+        value: postgres
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:****************@ep-solitary-moon-a8kxlnc3-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require
+      - key: DATABASE_SSL
+        value: true
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 1337
+      - key: APP_KEYS
+        value: aQNypb7hKumD9q/vz6ynPwrD9jTZeCR02R0uPpsXcXw=,wz5KRVZ/C9jMwMapSlfxsur3OSFx1mgA10EYARqHhUo=
+      - key: API_TOKEN_SALT
+        value: dVQSQ7Rc7S6BepcNAD+5q3SSdWznk0uNvzZYNKjmie0=
+      - key: ADMIN_JWT_SECRET
+        value: JHn8Lq5BKDwGwJzKUc3X9aPmRs7Vt4YeFbE2A6dZxNg=
+      - key: JWT_SECRET
+        value: pK3jM8sR7tG2vF5xZ9wQ1bN6cL4yD0aE3hU8oB7mS2p=
+      - key: CLOUDINARY_NAME
+        value: dzeycpcag
+      - key: CLOUDINARY_KEY
+        value: 549327572249383
+      - key: CLOUDINARY_SECRET
+        value: qAdiB5FFnhvnutDnGG6qNHUhE9I
+      - key: CORS_ORIGIN
+        value: https://tushuguan.vercel.app,http://localhost:3000

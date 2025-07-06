@@ -1,0 +1,19 @@
+{
+  "name": "tushuguan",
+  "version": "1.0.0",
+  "description": "图书馆管理系统",
+  "main": "index.js",
+  "scripts": {
+    "backend": "cd backend && npm run develop",
+    "frontend": "cd frontend && npm run dev",
+    "dev": "echo 请分别在两个命令行窗口中运行：npm run backend 和 npm run frontend",
+    "start": "echo 请分别在两个命令行窗口中运行：npm run backend 和 npm run frontend"
+  },
+  "keywords": [
+    "library",
+    "management",
+    "system"
+  ],
+  "author": "",
+  "license": "ISC"
+}
