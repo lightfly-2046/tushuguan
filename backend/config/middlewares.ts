@@ -5,10 +5,11 @@ export default [
   {
     name: 'strapi::cors',
     config: {
-      origin: ['https://tushuguan.vercel.app', 'http://localhost:3000', 'http://localhost:8080'],
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      headers: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+      origin: ['*'],
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
+      headers: ['Content-Type', 'Authorization', 'Origin', 'Accept', 'X-Requested-With'],
       keepHeaderOnError: true,
+      credentials: true,
     },
   },
   'strapi::poweredBy',
