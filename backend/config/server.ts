@@ -4,10 +4,20 @@ export default ({ env }) => ({
   app: {
     keys: env.array('APP_KEYS'),
   },
-  // 添加CORS配置
+  // 动态CORS配置
   cors: {
     enabled: true,
-    origin: env.array('CORS_ORIGIN', ['http://localhost:3000', 'https://your-frontend-domain.vercel.app']), // 允许的前端域名
-    headers: ['*'], // 允许所有请求头
+    origin: env.array('CORS_ORIGIN') || [
+      'http://localhost:3000',
+      'http://localhost:5000',
+      'https://your-frontend-domain.vercel.app'
+    ],
+    headers: ['*'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+    credentials: true,
+  },
+  // 安全配置
+  webhooks: {
+    populateRelations: env.bool('WEBHOOKS_POPULATE_RELATIONS', false),
   },
 });

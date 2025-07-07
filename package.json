@@ -7,7 +7,9 @@
     "backend": "cd backend && npm run develop",
     "frontend": "cd frontend && npm run dev",
     "dev": "echo 请分别在两个命令行窗口中运行：npm run backend 和 npm run frontend",
-    "start": "echo 请分别在两个命令行窗口中运行：npm run backend 和 npm run frontend"
+    "start": "echo 请分别在两个命令行窗口中运行：npm run backend 和 npm run frontend",
+    "dev:all": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "dev:win": "start cmd /k \"cd backend && npm run develop\" && start cmd /k \"cd frontend && npm run dev\""
   },
   "keywords": [
     "library",
@@ -15,5 +17,11 @@
     "system"
   ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "qs": "^6.14.0"
+  }
 }

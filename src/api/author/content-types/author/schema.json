@@ -4,8 +4,7 @@
   "info": {
     "singularName": "author",
     "pluralName": "authors",
-    "displayName": "Author",
-    "description": "作者信息"
+    "displayName": "Author"
   },
   "options": {
     "draftAndPublish": true
@@ -13,20 +12,24 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string",
-      "required": true
-    },
-    "bio": {
-      "type": "text"
+      "type": "string"
     },
     "jianjie": {
-      "type": "text"
+      "type": "blocks"
     },
     "books": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::book.book",
       "mappedBy": "author"
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
     }
   }
-}
+} 

@@ -1,20 +1,30 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { use, useState, useEffect } from 'react';
 import { getBook } from '../../../lib/api';
 import Link from 'next/link';
 
 export default function BookDetailPage({ params }) {
-  const { id } = params;
+  // 兼容 Next.js 13+，params 可能是 Promise
+  const realParams = typeof params?.then === 'function' ? use(params) : params;
+  const id = realParams?.id ? (Array.isArray(realParams.id) ? realParams.id[0] : realParams.id) : '';
+
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!id) {
+      setError('无效的图书ID');
+      setLoading(false);
+      return;
+    }
     async function loadBook() {
       try {
         setLoading(true);
+        setError(null);
         const data = await getBook(id);
+        console.log('图书详情数据:', data);
         setBook(data.data);
       } catch (err) {
         console.error(`加载图书ID:${id}失败:`, err);
@@ -23,7 +33,6 @@ export default function BookDetailPage({ params }) {
         setLoading(false);
       }
     }
-
     loadBook();
   }, [id]);
 
@@ -39,7 +48,42 @@ export default function BookDetailPage({ params }) {
     return <div className="text-center p-8">未找到图书</div>;
   }
 
-  const { attributes } = book;
+  // 安全地获取图书数据
+  const getBookData = () => {
+    try {
+      const { attributes } = book;
+      return {
+        title: attributes?.Title || '未知书名',
+        author: attributes?.author?.data?.attributes?.name || '未知作者',
+        categories: attributes?.categories?.data 
+          ? attributes.categories.data.map(cat => cat.attributes.name).join(', ') 
+          : '未分类',
+        isbn: attributes?.isbn || '未知',
+        publishedDate: attributes?.publishedDate 
+          ? new Date(attributes.publishedDate).toLocaleDateString('zh-CN') 
+          : '未知',
+        pages: attributes?.pages || '未知',
+        language: attributes?.language || '未知',
+        description: attributes?.description || '暂无简介',
+        coverUrl: attributes?.cover?.data?.attributes?.url || null
+      };
+    } catch (e) {
+      console.error('解析图书详情数据错误:', e);
+      return {
+        title: '数据错误',
+        author: '未知',
+        categories: '未知',
+        isbn: '未知',
+        publishedDate: '未知',
+        pages: '未知',
+        language: '未知',
+        description: '数据解析错误',
+        coverUrl: null
+      };
+    }
+  };
+
+  const bookData = getBookData();
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -51,40 +95,42 @@ export default function BookDetailPage({ params }) {
 
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="p-6">
-          <h1 className="text-3xl font-bold mb-4">{attributes.Title}</h1>
+          <h1 className="text-3xl font-bold mb-4">{bookData.title}</h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
               <h2 className="text-xl font-semibold mb-2">图书信息</h2>
               <p className="mb-2">
                 <span className="font-semibold">作者：</span>
-                {attributes.author?.data ? attributes.author.data.attributes.name : '未知'}
+                {bookData.author}
               </p>
               <p className="mb-2">
                 <span className="font-semibold">分类：</span>
-                {attributes.categories?.data && attributes.categories.data.length > 0 
-                  ? attributes.categories.data.map(cat => cat.attributes.name).join(', ') 
-                  : '未分类'}
-              </p>
-              <p className="mb-2">
-                <span className="font-semibold">出版社：</span>
-                {attributes.publisher?.data ? attributes.publisher.data.attributes.name : '未知'}
+                {bookData.categories}
               </p>
               <p className="mb-2">
                 <span className="font-semibold">ISBN：</span>
-                {attributes.isbn || '未知'}
+                {bookData.isbn}
               </p>
               <p className="mb-2">
                 <span className="font-semibold">出版日期：</span>
-                {attributes.publishDate ? new Date(attributes.publishDate).toLocaleDateString('zh-CN') : '未知'}
+                {bookData.publishedDate}
+              </p>
+              <p className="mb-2">
+                <span className="font-semibold">页数：</span>
+                {bookData.pages}
+              </p>
+              <p className="mb-2">
+                <span className="font-semibold">语言：</span>
+                {bookData.language}
               </p>
             </div>
             
             <div>
-              {attributes.cover?.data && (
+              {bookData.coverUrl && (
                 <img 
-                  src={attributes.cover.data.attributes.url} 
-                  alt={`${attributes.Title}的封面`}
+                  src={bookData.coverUrl} 
+                  alt={`${bookData.title}的封面`}
                   className="w-full h-auto rounded shadow"
                 />
               )}
@@ -93,7 +139,7 @@ export default function BookDetailPage({ params }) {
           
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">简介</h2>
-            <p className="text-gray-700 whitespace-pre-line">{attributes.descript || '暂无简介'}</p>
+            <p className="text-gray-700 whitespace-pre-line">{bookData.description}</p>
           </div>
         </div>
       </div>

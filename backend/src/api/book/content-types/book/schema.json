@@ -4,7 +4,8 @@
   "info": {
     "singularName": "book",
     "pluralName": "books",
-    "displayName": "book"
+    "displayName": "Book",
+    "description": "图书信息管理"
   },
   "options": {
     "draftAndPublish": true
@@ -12,10 +13,34 @@
   "pluginOptions": {},
   "attributes": {
     "Title": {
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "maxLength": 255
     },
-    "descript": {
-      "type": "blocks"
+    "description": {
+      "type": "text"
+    },
+    "isbn": {
+      "type": "string",
+      "unique": true,
+      "maxLength": 20
+    },
+    "publishedDate": {
+      "type": "date"
+    },
+    "pages": {
+      "type": "integer",
+      "min": 1
+    },
+    "language": {
+      "type": "string",
+      "default": "中文"
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
     },
     "author": {
       "type": "relation",
@@ -27,13 +52,7 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::category.category",
-      "inversedBy": "books"
-    },
-    "publisher": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::publisher.publisher",
-      "inversedBy": "books"
+      "mappedBy": "books"
     }
   }
 }

@@ -1,6 +1,7 @@
 import path from 'path';
 
 export default ({ env }) => {
+  // 根据环境选择数据库
   const client = env('DATABASE_CLIENT', 'sqlite');
 
   const connections = {
